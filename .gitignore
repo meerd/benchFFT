@@ -9,12 +9,14 @@ config.guess
 config.sub
 configure
 depcomp
+config.h.in
 config.h
 *.config.h
 config.log
 *.config.log
 config.status
 *.config.status
+config.h.in~
 
 # Build steps ###############
 compile
@@ -32,11 +34,26 @@ benchees/*/fftinfo
 benchees/*/extract-mkdir
 benchees/kissfft/kiss_fft_04/
 
+benchees/*/fft/
+benchees/*/fft2d/
+benchees/*/extract
+benchees/*/extract2
+
 libbench/.deps/
 libbench/Makefile
 
 benchees/Makefile
 scripts/Makefile
+
+benchees/cwplib/cwplib/
+benchees/fftreal/FFTReal/
+benchees/green-ffts-2.0/*.c
+benchees/green-ffts-2.0/*.h
+benchees/green-ffts-2.0/fft2d.c
+benchees/green-ffts-2.0/green-ffts-2.0/
+benchees/krukar/ffts_in_C-1.0/
+benchees/ransom/ransom/
+benchees/vbigdsp/vBigDSP/
 
 Makefile
 
