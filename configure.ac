@@ -173,8 +173,8 @@ AM_CONDITIONAL(HAVE_SGIMATH, test -n "$have_sgimath")
 AC_CHECK_HEADERS(fft.h)
 
 # Check for AMD Core Math Library (ACML):
-AC_CHECK_LIB(acml, zfft1d_, [have_acml=yes], [], $FLIBS)
-AM_CONDITIONAL(HAVE_ACML, test -n "$have_acml")
+#AC_CHECK_LIB(acml, zfft1d_, [have_acml=yes], [], $FLIBS)
+#AM_CONDITIONAL(HAVE_ACML, test -n "$have_acml")
 
 # Check for ESSL library (some versions have only one precision):
 if test "x$benchfft_single" = xyes; then
@@ -329,62 +329,12 @@ libbench/Makefile
 benchees/Makefile
 scripts/Makefile
 
-benchees/acml/Makefile
-benchees/arprec/Makefile
-benchees/bloodworth/Makefile
-benchees/burrus/Makefile
-benchees/cross/Makefile
-benchees/cwplib/Makefile
-benchees/dfftpack/Makefile
-benchees/dsp/Makefile
-benchees/dxml/Makefile
-benchees/emayer/Makefile
-benchees/esrfft/Makefile
-benchees/essl/Makefile
-benchees/ffte/Makefile
 benchees/fftpack/Makefile
-benchees/fftreal/Makefile
 benchees/fftw2/Makefile
 benchees/fftw3/Makefile
-benchees/fxt/Makefile
-benchees/glassman/Makefile
-benchees/goedecker/Makefile
-benchees/gpfa/Makefile
-benchees/green-ffts-2.0/Makefile
-benchees/gsl/Makefile
-benchees/harm/Makefile
-benchees/imsl/Makefile
-benchees/intel-ipps/Makefile
-benchees/intel-mkl/Makefile
-benchees/jmfft/Makefile
 benchees/kissfft/Makefile
-benchees/krukar/Makefile
-benchees/mfft/Makefile
 benchees/mixfft/Makefile
-benchees/monnier/Makefile
-benchees/morris/Makefile
-benchees/mpfun77/Makefile
-benchees/mpfun90/Makefile
-benchees/nag/Makefile
-benchees/napack/Makefile
-benchees/nr/Makefile
-benchees/numutils/Makefile
-benchees/ooura/Makefile
 benchees/qft/Makefile
-benchees/ransom/Makefile
-benchees/rmayer/Makefile
-benchees/sciport/Makefile
-benchees/sgimath/Makefile
-benchees/singleton/Makefile
-benchees/sorensen/Makefile
-benchees/spiral-fft/Makefile
-benchees/statlib/Makefile
-benchees/sunperf/Makefile
-benchees/temperton/Makefile
-benchees/teneyck/Makefile
-benchees/valkenburg/Makefile
-benchees/vbigdsp/Makefile
-benchees/vdsp/Makefile
 
 ])
 
