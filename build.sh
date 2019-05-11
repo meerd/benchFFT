@@ -6,6 +6,8 @@ $(PKG_MANAGER) install libmotif-dev grace libgd2-xpm-dev
 
 make distclean
 
+git update-index --skip-worktree Makefile.in
+
 sh bootstrap.sh
 
 ./configure --enable-single
