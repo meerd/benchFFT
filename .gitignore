@@ -1,9 +1,50 @@
+# Folders ###################
 OBJ/
-aclocal.m4
 autom4te.cache/
-compile
+plots/
+
+# Automake ###################
+aclocal.m4
 config.guess
 config.sub
 configure
 depcomp
+config.h
+*.config.h
+config.log
+*.config.log
+config.status
+*.config.status
+
+# Build steps ###############
+compile
 missing
+stamp-h1
+
+# Generated Files ##########
+benchees/*/Makefile
+benchees/*/.deps/
+benchees/*/accuracy
+benchees/*/doit
+benchees/*/doit*
+
+benchees/*/fftinfo
+benchees/*/extract-mkdir
+benchees/kissfft/kiss_fft_04/
+
+libbench/.deps/
+libbench/Makefile
+
+benchees/Makefile
+scripts/Makefile
+
+Makefile
+
+# Extensions #############
+*.o
+*.a
+*.accuracy
+*.info
+*.speed
+*.sysinfo
+*.tar.gz
