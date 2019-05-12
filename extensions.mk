@@ -6,7 +6,20 @@ WORKING_DIRECTORY:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 CMAKE_STD_BUILD=mkdir -p build/ && cd build/ && cmake .. && make
 HOSTNAME:=$(shell hostname)
 
-export ENABLED_BENCHMARKS=kissfft
+ENABLED_BENCHMARKS_LIST=
+-include .config
+ENABLED_BENCHMARKS_LIST+=$(if $(CONFIG_BENCHFFT_USE_KISSFFT),kissfft,)
+ENABLED_BENCHMARKS_LIST+=$(if $(CONFIG_BENCHFFT_USE_QFT),qft,)
+ENABLED_BENCHMARKS_LIST+=$(if $(CONFIG_BENCHFFT_USE_FFTW3),fftw3,)
+export ENABLED_BENCHMARKS=$(ENABLED_BENCHMARKS_LIST)
+
+#SUBDIRS = xacml arprec bloodworth burrus cross cwplib dfftpack dsp dxml	\
+#emayer esrfft essl ffte fftpack fftreal fftw2 fftw3 fxt glassman	\
+#goedecker gpfa green-ffts-2.0 gsl harm imsl intel-mkl intel-ipps jmfft	\
+#kissfft krukar mfft mixfft monnier morris mpfun77 mpfun90 nag napack	\
+#nr numutils ooura qft ransom rmayer sciport sgimath singleton sorensen	\
+#spiral-fft statlib sunperf temperton teneyck valkenburg vbigdsp vdsp
+
 
 ## Menu Config ###############################################
 
@@ -18,10 +31,8 @@ mc_build:
 	(cd $(WORKING_DIRECTORY)/tools/menuconfig && $(CMAKE_STD_BUILD))
 
 mc_update_config: mc_prepare
-$(shell ([ ! -f .config ] && cp ./configs/defconfig .config;) 2>/dev/null; true)
 $(eval include .config)
-$(foreach v, $(filter CONFIG_BENCHFFT_%,$(.VARIABLES)), $(eval $(export $(v)=$($(v)))))
-$(foreach v, $(filter CONFIG_BENCHFFT_%,$(.VARIABLES)), $(eval $(info $(v)=$($(v)))))
+$(foreach v, $(filter CONFIG_BENCHFFT_%,$(.VARIABLES)), $(sh export $(v)=$($(v))))
 
 menuconfig: mc_prepare mc_build
 	(cd $(WORKING_DIRECTORY) && ./tools/menuconfig/build/mconf configs/Config)
@@ -39,9 +50,10 @@ run: mc_update_config
 		make -k accuracy ;\
 	fi
 	@if [[ "$(CONFIG_BENCHFFT_SPEED)" == "y" ]]; then \
-                find $(WORKING_DIRECTORY)/benchees -name benchmark -delete ;\
-                make -k benchmark ;\
-        fi
+		find $(WORKING_DIRECTORY)/benchees -name benchmark -delete ;\
+		make -k benchmark ;\
+	fi
+
 plot: collect
 	(cd $(WORKING_DIRECTORY) && \
 	 rm -rf plots/ && \ 
