@@ -1,0 +1,44 @@
+
+mainmenu "Benchapp Test Configuration"
+
+config CONFIG_CONFIGURED
+    bool
+    default y
+
+config CROSS_PREFIX
+    string "Cross compile prefix"
+
+choice
+    prompt "Target Platform Selection"
+    default PLATFORM_LINUX
+    help
+	linux:
+	windows:
+
+config PLATFORM_LINUX
+    bool "linux"
+
+config PLATFORM_WINDOWS
+    bool "windows"
+
+endchoice
+
+menu "General Settings"
+
+config BENCHFFT_ACCURACY
+    bool "Enable Accuracy Tests"
+    default y
+
+config BENCHFFT_SPEED
+   bool "Enable Speed Tests"
+   default n
+
+config BENCHFFT_MAX_PROBLEM_SIZE
+    int "Maximum Problem Size"
+    default 4096
+
+config BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE
+    int "Maximum Multi-Dimensional Problem Size"
+    default 65536
+
+endmenu

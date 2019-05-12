@@ -2,6 +2,8 @@
 OBJ/
 autom4te.cache/
 plots/
+build/
+*/build/
 
 # Automake ###################
 aclocal.m4
@@ -17,6 +19,8 @@ config.log
 config.status
 *.config.status
 config.h.in~
+.config
+.config.old
 
 # Build steps ###############
 compile
@@ -29,22 +33,16 @@ benchees/*/.deps/
 benchees/*/accuracy
 benchees/*/doit
 benchees/*/doit*
-
+benchees/*/benchmark
 benchees/*/fftinfo
 benchees/*/extract-mkdir
-benchees/kissfft/kiss_fft_04/
-
 benchees/*/fft/
 benchees/*/fft2d/
 benchees/*/extract
 benchees/*/extract2
 
-libbench/.deps/
-libbench/Makefile
-
 benchees/Makefile
-scripts/Makefile
-
+benchees/kissfft/kiss_fft_04/
 benchees/cwplib/cwplib/
 benchees/fftreal/FFTReal/
 benchees/green-ffts-2.0/*.c
@@ -54,6 +52,18 @@ benchees/green-ffts-2.0/green-ffts-2.0/
 benchees/krukar/ffts_in_C-1.0/
 benchees/ransom/ransom/
 benchees/vbigdsp/vBigDSP/
+benchees/mixfft/mixfft05/
+benchees/numutils/numutils/
+benchees/spiral-fft/spiral_fft/
+benchees/jmfft/JMFFTC-1.0/
+benchees/mixfft/Mixfft.c
+
+libbench/.deps/
+libbench/Makefile
+libbench/fftinfo
+
+scripts/Makefile
+scripts/fftinfo
 
 Makefile
 
@@ -65,3 +75,5 @@ Makefile
 *.speed
 *.sysinfo
 *.tar.gz
+*.ps
+*~

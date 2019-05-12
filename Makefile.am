@@ -9,6 +9,8 @@ OUTFILE=
 collect:
 	$(SHELL) ${top_srcdir}/scripts/collect ${top_builddir}/benchees $(OUTFILE)
 
+include extensions.mk
+
 # this is a hack
 RECURSIVE_TARGETS =
 RECURSIVE_TARGETS += benchmark-recursive accuracy-recursive fftinfo-recursive
