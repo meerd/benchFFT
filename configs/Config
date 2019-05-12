@@ -8,21 +8,6 @@ config CONFIG_CONFIGURED
 config CROSS_PREFIX
     string "Cross compile prefix"
 
-choice
-    prompt "Target Platform Selection"
-    default PLATFORM_LINUX
-    help
-	linux:
-	windows:
-
-config PLATFORM_LINUX
-    bool "linux"
-
-config PLATFORM_WINDOWS
-    bool "windows"
-
-endchoice
-
 menu "General Settings"
 
 config BENCHFFT_ACCURACY
@@ -40,5 +25,246 @@ config BENCHFFT_MAX_PROBLEM_SIZE
 config BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE
     int "Maximum Multi-Dimensional Problem Size"
     default 65536
+
+endmenu
+
+
+menu "FFT Implementations to Use"
+
+config BENCHFFT_USE_ACML
+   bool "AMD Core Math Library (ACML)"
+   default n
+
+config BENCHFFT_USE_ARPREC
+   bool "Arithmetic-Precision Library (ARPREC)"
+   default n
+
+config BENCHFFT_USE_BLOODWORTH
+   bool "Carey E. Bloodworth's Implementation"
+   default n
+
+config BENCHFFT_USE_BLOODWORTH
+   bool "Carey E. Bloodworth's Implementation"
+   default n
+
+config BENCHFFT_USE_BURRUS_SFFTEU
+   bool "Charles Sidney Burrus' Implementation"
+   default n
+
+config BENCHFFT_USE_CXML
+   bool "Compaq Extended Math Library"
+   default n
+
+config BENCHFFT_USE_CROSS
+   bool "Don Cross' Implementation"
+   default n
+
+config BENCHFFT_USE_CWPLIB
+   bool "cwplib"
+   default n
+
+config BENCHFFT_USE_DFFTPACK
+   bool "DFFTPACK"
+   default n
+
+config BENCHFFT_USE_EMAYER
+   bool "Erns W. Mayer's Implementation"
+   default n
+
+config BENCHFFT_USE_ESRFFT
+   bool "Extended Split-Radix FFT"
+   default n
+
+config BENCHFFT_USE_ESSL
+   bool "IBM Engineering and Scientific Subroutine Library"
+   default n
+
+config BENCHFFT_USE_FFMPEG
+   bool "FFmpeg"
+   default n
+
+config BENCHFFT_USE_FFTE
+   bool "FFTE"
+   default n
+
+config BENCHFFT_USE_FFTPACK
+   bool "FFTPACK"
+   default n
+
+config BENCHFFT_USE_FFTREAL
+   bool "FFTReal"
+   default n
+
+config BENCHFFT_USE_FFTS_FOR_RISC
+   bool "FFTs for RISC 2.0"
+   default n
+
+config BENCHFFT_USE_FFTW2
+   bool "FFTW 2"
+   default y
+
+config BENCHFFT_USE_FFTW3
+   bool "FFTW 3"
+   default y
+
+config BENCHFFT_USE_FXT
+   bool "FXT"
+   default n
+
+config BENCHFFT_USE_GLASSMAN
+   bool "J.A. Glassman's Implementation"
+   default n
+
+config BENCHFFT_USE_GNU_GSL
+   bool "GNU Scientific Library (GSL)"
+   default n
+
+config BENCHFFT_USE_GOEDECKER
+   bool "Stefan Goedecker's Implementation"
+   default n
+
+config BENCHFFT_USE_GPFA
+   bool "Generalized Prime Factor FFT (GPFA)"
+   default n
+
+config BENCHFFT_USE_HARM
+   bool "HARM"
+   default n
+
+config BENCHFFT_USE_HP_MLIB
+   bool "HP Mathematical Software Library"
+   default n
+
+config BENCHFFT_USE_IMSL
+   bool "International Mathematical and Statistical Library"
+   default n
+
+config BENCHFFT_USE_IPPS
+   bool "Intel Integrated Performance Primitives"
+   default n
+
+config BENCHFFT_USE_JMFFT
+   bool "Jean-Marie Teuler's Implementation"
+   default n
+
+config BENCHFFT_USE_KISSFFT
+   bool "Kiss FFT"
+   default y
+
+config BENCHFFT_USE_KRUKAR
+   bool "Richard H. Krukar's Implementation"
+   default n
+
+config BENCHFFT_USE_MFFT
+   bool "MFFT"
+   default n
+
+config BENCHFFT_USE_MIXFFT
+   bool "MIXFFT"
+   default n
+
+config BENCHFFT_USE_MONIER
+   bool "Yves Monnier's Implementation"
+   default n
+
+config BENCHFFT_USE_MORRIS
+   bool "L. Robert Morris' Implementation"
+   default n
+
+config BENCHFFT_USE_MPFUN77
+   bool "MPFUN Multi-precision Arithmetic Library (Fortan 77)"
+   default n
+
+config BENCHFFT_USE_MPFUN90
+   bool "MPFUN Multi-precision Arithmetic Library (Fortan 90)"
+   default n
+
+config BENCHFFT_USE_NAG
+   bool "Numerical Algorithms Group (NAG) Library"
+   default n
+
+config BENCHFFT_USE_NAPACK
+   bool "NAPACK"
+   default n
+
+config BENCHFFT_USE_NEWSPLIT
+   bool "newsplit"
+   default n
+
+config BENCHFFT_USE_NR
+   bool "Numerical Recipes Book's Implementation"
+   default n
+
+config BENCHFFT_USE_NUMUTILS
+   bool "numutils"
+   default n
+
+config BENCHFFT_USE_OOURA
+   bool "Takuya Ooura's Implementation"
+   default n
+
+config BENCHFFT_USE_DSP79
+   bool "Programs for Digital Signal Processing"
+   default n
+
+config BENCHFFT_USE_QFT
+   bool "QFT"
+   default y
+
+config BENCHFFT_USE_RANSOM
+   bool "Scott Ransom's Implementation"
+   default n
+
+config BENCHFFT_USE_RMAYER
+   bool "Ron Mayer's Implementation"
+   default n
+
+config BENCHFFT_USE_SCIMARK
+   bool "SciMark"
+   default n
+
+config BENCHFFT_USE_SCIPORT
+   bool "SciPort"
+   default n
+
+config BENCHFFT_USE_SGIMATH
+   bool "Silicon Graphics Scientific Mathematical Library"
+   default n
+
+config BENCHFFT_USE_SINGLETON
+   bool "R.C. Singleton's Implementation"
+   default n
+
+config BENCHFFT_USE_SORENSEN
+   bool "Henrik Sorensen's Implementation"
+   default n
+
+config BENCHFFT_USE_SPIRAL_ENGER_FFT
+   bool "Sebastian Egner's Implementation"
+   default n
+
+config BENCHFFT_USE_STATLIB
+   bool "StatLib"
+   default n
+
+config BENCHFFT_USE_SUNPERF
+   bool "Sub Performance Library"
+   default n
+
+config BENCHFFT_USE_TEMPERTON
+   bool "Clive Temperton's Implementation"
+   default n
+
+config BENCHFFT_USE_TENEYCK
+   bool "Lynn F. Ten Eyck's Implementation"
+   default n
+
+config BENCHFFT_USE_VBIGDSP
+   bool "FFT Library for Apple G4 (vBigDsp)"
+   default n
+
+config BENCHFFT_USE_VDSP
+   bool "FFT Library for Apple G4 (vDSP)"
+   default n
 
 endmenu
