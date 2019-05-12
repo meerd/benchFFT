@@ -101,7 +101,7 @@ config BENCHFFT_USE_FFTS_FOR_RISC
 
 config BENCHFFT_USE_FFTW2
    bool "FFTW 2"
-   default y
+   default n
 
 config BENCHFFT_USE_FFTW3
    bool "FFTW 3"
@@ -257,6 +257,10 @@ config BENCHFFT_USE_TEMPERTON
 
 config BENCHFFT_USE_TENEYCK
    bool "Lynn F. Ten Eyck's Implementation"
+   default n
+
+config BENCHFFT_USE_VALKENBURG
+   bool "Peter Valkenburg's Implementation"
    default n
 
 config BENCHFFT_USE_VBIGDSP
