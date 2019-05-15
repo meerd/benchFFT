@@ -30,11 +30,6 @@ END_BENCH_DOC
 int can_do(struct problem *p)
 {
 	if (p->kind != PROBLEM_COMPLEX) {
-		{
-			char buf[64];
-			sprintf(buf, "echo \"VSIZE:%d\" >> /tmp/out.txt", p->size);
-			system(buf);
-		}make
 		return (p->size % 2 == 0) && (0 == p->in_place);
 	}
 
