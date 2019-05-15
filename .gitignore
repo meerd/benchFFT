@@ -42,7 +42,7 @@ benchees/*/extract
 benchees/*/extract2
 
 benchees/Makefile
-benchees/kissfft/kiss_fft_04/
+benchees/kissfft/kissfft-master/
 benchees/cwplib/cwplib/
 benchees/fftreal/FFTReal/
 benchees/green-ffts-2.0/*.c
