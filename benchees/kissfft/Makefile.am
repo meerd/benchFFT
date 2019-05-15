@@ -1,5 +1,5 @@
 PRG=doit
-PKG=kiss_fft_04
+PKG=kissfft-master
 TARFILE=$(PKG).tar.gz
 INCLUDES = $(INCLBENCH) -I$(PKG)
 EXTRA_DIST = $(TARFILE)
@@ -11,7 +11,7 @@ AM_CFLAGS=-Dkiss_fft_scalar=double
 endif
 
 doit_SOURCES=doit.c
-nodist_doit_SOURCES=$(PKG)/kiss_fft.c
+nodist_doit_SOURCES=$(PKG)/kiss_fft.c $(PKG)/tools/kiss_fftnd.c $(PKG)/tools/kiss_fftr.c $(PKG)/tools/kiss_fftndr.c
 doit_LDADD=$(LIBBENCH)
 
 include ../Makefile.common

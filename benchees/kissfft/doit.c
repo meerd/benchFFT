@@ -3,11 +3,13 @@
 #include "bench-user.h"
 #include <math.h>
 #include "kiss_fft.h"
-
+#include "./tools/kiss_fftnd.h"
+#include "./tools/kiss_fftr.h"
+#include "./tools/kiss_fftndr.h"
 BEGIN_BENCH_DOC
 BENCH_DOC("name", "kissfft")
-BENCH_DOC("version", "0.4")
-BENCH_DOC("year", "2003")
+BENCH_DOC("version", "1.3")
+BENCH_DOC("year", "2019")
 BENCH_DOC("author", "Mark Borgerding")
 BENCH_DOC("language", "C")
 BENCH_DOC("url", "http://sourceforge.net/projects/kissfft/")
@@ -27,14 +29,61 @@ END_BENCH_DOC
 
 int can_do(struct problem *p)
 {
-     return p->rank == 1 && p->kind == PROBLEM_COMPLEX;
+	if (p->kind != PROBLEM_COMPLEX) {
+		{
+			char buf[64];
+			sprintf(buf, "echo \"VSIZE:%d\" >> /tmp/out.txt", p->size);
+			system(buf);
+		}make
+		return (p->size % 2 == 0) && (0 == p->in_place);
+	}
+
+	return 0 == p->in_place;
 }
 
 static void *WORK;
 
+void copy_h2c(struct problem *p, bench_complex *out)
+{
+     copy_h2c_unpacked(p, out, -1.0);
+}
+
+void copy_c2h(struct problem *p, bench_complex *in)
+{
+     copy_c2h_unpacked(p, in, -1.0);
+}
+
+void copy_r2c(struct problem *p, bench_complex *out)
+{
+     if (problem_in_place(p))
+	  copy_r2c_unpacked(p, out);	  
+     else
+	  copy_r2c_packed(p, out);
+}
+
+void copy_c2r(struct problem *p, bench_complex *in)
+{
+     if (problem_in_place(p))
+	  copy_c2r_unpacked(p, in);
+     else
+	  copy_c2r_packed(p, in);
+}
+
 void setup(struct problem *p)
 {
-     WORK = kiss_fft_alloc(p->n[0], (p->sign == 1));
+    if (p->kind == PROBLEM_COMPLEX) {
+		if (p->rank == 1) { 
+			WORK = kiss_fft_alloc(p->n[0], (p->sign == 1), 0, 0);
+		} else {
+			WORK = kiss_fftnd_alloc(p->n, p->rank, (p->sign == 1), 0, 0);
+		}
+	} else {
+		if (p->rank == 1) { 
+			WORK = kiss_fftr_alloc(p->n[0], (p->sign == 1), 0, 0);
+		} else {
+			WORK = kiss_fftndr_alloc(p->n, p->rank, (p->sign == 1), 0, 0);
+		}
+	}
 }
 
 void doit(int iter, struct problem *p)
@@ -43,14 +92,34 @@ void doit(int iter, struct problem *p)
      void *in = p->in;
      void *work = WORK;
      
-     if (p->in_place) {
-	  for (i = 0; i < iter; ++i) 
-	       kiss_fft(work, in);
-     }
-     else {
-	  void *out = p->out;
-	  for (i = 0; i < iter; ++i) 
-	       kiss_fft_io(work, in, out);
+     if (0 == p->in_place) {
+	   void *out = p->out;
+
+		if (p->kind == PROBLEM_COMPLEX) {
+			if (p->rank == 1) { 
+				for (i = 0; i < iter; ++i) 
+					kiss_fft(work, in, out);
+			} else {
+				for (i = 0; i < iter; ++i)
+					kiss_fftnd(work, in, out);
+			}
+		} else {
+			if (p->rank == 1) { 
+				for (i = 0; i < iter; ++i) {
+					if (p->sign == 1) 
+						kiss_fftri(work, in, out);
+					else
+						kiss_fftr(work, in, out);
+				}
+			} else {
+				for (i = 0; i < iter; ++i) {
+					if (p->sign == 1) 
+						kiss_fftndri(work, in, out);
+					else
+						kiss_fftndr(work, in, out);
+				} 
+			}
+		}
      }
 }
 
