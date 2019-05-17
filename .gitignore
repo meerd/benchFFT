@@ -28,7 +28,6 @@ missing
 stamp-h1
 
 # Generated Files ##########
-benchees/*/Makefile
 benchees/*/.deps/
 benchees/*/accuracy
 benchees/*/doit
@@ -41,7 +40,6 @@ benchees/*/fft2d/
 benchees/*/extract
 benchees/*/extract2
 
-benchees/Makefile
 benchees/kissfft/kissfft-master/
 benchees/cwplib/cwplib/
 benchees/fftreal/FFTReal/
@@ -59,13 +57,14 @@ benchees/jmfft/JMFFTC-1.0/
 benchees/mixfft/Mixfft.c
 
 libbench/.deps/
-libbench/Makefile
 libbench/fftinfo
 
-scripts/Makefile
 scripts/fftinfo
 
 Makefile
+Makefile.in
+*/Makefile
+*/Makefile.in
 
 # Extensions #############
 *.o
@@ -77,3 +76,4 @@ Makefile
 *.tar.gz
 *.ps
 *~
+*.log

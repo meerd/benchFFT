@@ -348,7 +348,6 @@ benchees/fftw2/Makefile
 benchees/fftw3/Makefile
 benchees/fxt/Makefile
 benchees/glassman/Makefile
-benchees/goedecker/Makefile
 benchees/gpfa/Makefile
 benchees/green-ffts-2.0/Makefile
 benchees/gsl/Makefile
