@@ -4,13 +4,6 @@ noinst_PROGRAMS=$(PRG)
 LIBBENCH=${top_builddir}/libbench/libbench.a
 INCLBENCH=-I${top_srcdir}/libbench
 
-# Read configuration variables
-WORKING_DIRECTORY:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-$(eval include $(WORKING_DIRECTORY)/../../.config)
-$(foreach v, $(filter CONFIG_BENCHFFT_%,$(.VARIABLES)), $(sh export $(v)=$($(v))))
-
-MAXN=$(CONFIG_BENCHFFT_MAX_PROBLEM_SIZE)
-MAXND=$(CONFIG_BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE)
 BENCHMARK=$(SHELL) ${top_srcdir}/scripts/benchmark --maxn=$(MAXN) --maxnd=$(MAXND) $(BENCHMARK_USEROPT) $(BENCHMARK_FLAGS) 
 WRITEINFO=$(SHELL) ${top_srcdir}/scripts/writeinfo
 

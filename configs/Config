@@ -8,6 +8,10 @@ config CONFIG_CONFIGURED
 config CROSS_PREFIX
     string "Cross compile prefix"
 
+config BENCHFFT_TEST_PROFILE_NAME
+    string "Test Profile Name"
+    default "test"
+
 menu "General Settings"
 
 config BENCHFFT_ACCURACY
@@ -17,6 +21,29 @@ config BENCHFFT_ACCURACY
 config BENCHFFT_SPEED
    bool "Enable Speed Tests"
    default n
+
+choice
+    prompt "Precision Settings"
+    default BENCHFFT_PRECISION_SINGLE
+    help
+        single:
+        double:
+        single_double:
+
+config BENCHFFT_PRECISION_SINGLE
+    bool "Single Precision"
+
+config BENCHFFT_PRECISION_DOUBLE
+    bool "Double Precision"
+
+config BENCHFFT_PRECISION_BOTH
+    bool "Single+Double Precision"
+
+endchoice
+
+config BENCHFFT_CATCH_FP_EXCEPTIONS
+    bool "Catch Floating Point Exceptions"
+    default n
 
 config BENCHFFT_MAX_PROBLEM_SIZE
     int "Maximum Problem Size"

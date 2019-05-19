@@ -27,10 +27,11 @@ esac
 test -n "$outfile" || outfile=`(hostname || uname -n) 2>/dev/null | sed 1q`
 test -n "$outfile" || outfile="unnamed"
 
-cat ${benchdir}/*/*.speed >${outfile}.speed
-cat ${benchdir}/*/*.info >${outfile}.info
-cat ${benchdir}/*/*.accuracy >${outfile}.accuracy
-sh $medir/sysinfo >${outfile}.sysinfo
+cat ${benchdir}/*/*.speed >> ${outfile}.speed 
+cat ${benchdir}/*/*.info >> ${outfile}.info
+cat ${benchdir}/*/*.accuracy >> ${outfile}.accuracy
+sh $medir/sysinfo >> ${outfile}.sysinfo
+
 extra="config.h config.log config.status"
 nextra=""
 for n in config.h config.log config.status; do
@@ -38,4 +39,3 @@ for n in config.h config.log config.status; do
     nextra="${nextra} ${outfile}.${n}"
 done
 
-tar cf - ${outfile}.speed ${outfile}.accuracy ${outfile}.info ${outfile}.sysinfo ${nextra} | gzip -9 >${outfile}.tar.gz

@@ -9,7 +9,7 @@ OUTFILE=
 collect:
 	$(SHELL) ${top_srcdir}/scripts/collect ${top_builddir}/benchees $(OUTFILE)
 
-include extensions.mk
+include configuration.mk
 
 # this is a hack
 RECURSIVE_TARGETS =
