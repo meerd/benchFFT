@@ -8,6 +8,11 @@ HOSTNAME:=$(shell hostname)
 
 SHELL := /bin/bash
 RM    := rm -rf
+MKDIR := mkdir -p
+FIND  := find $(WORKING_DIRECTORY)/
+CD    := cd
+CP    := cp -f
+MAKE  := make
 
 .PHONY: env init
 
@@ -16,59 +21,60 @@ env:
 	$(PKG_MANAGER) install libmotif-dev grace libgd2-xpm-dev
 
 init:
-	rm -f config.status 
-	rm -f config.cache
+	$(RM) config.status 
+	$(RM) config.cache
 
 	(aclocal && autoconf && autoheader && automake --add-missing)
 
 ## Menu Config ###############################################
 
 mc_prepare:
-	cd $(WORKING_DIRECTORY)
-	([ ! -f .config ] && cp ./configs/defconfig .config;) 2>/dev/null; true
+	$(CD) $(WORKING_DIRECTORY)
+	([ ! -f .config ] && $(CP) ./configs/defconfig .config;) 2>/dev/null; true
 
 mc_build: 
-	(cd $(WORKING_DIRECTORY)/tools/menuconfig && $(CMAKE_STD_BUILD))
+	($(CD) $(WORKING_DIRECTORY)/tools/menuconfig && $(CMAKE_STD_BUILD))
 
 mc_update_config: mc_prepare
 $(eval include .config)
 $(foreach v, $(filter CONFIG_BENCHFFT_%,$(.VARIABLES)), $(sh export $(v)=$($(v))))
 
 menuconfig: mc_prepare mc_build
-	(cd $(WORKING_DIRECTORY) && ./tools/menuconfig/build/mconf configs/Config)
+	($(CD) $(WORKING_DIRECTORY) && ./tools/menuconfig/build/mconf configs/Config)
 	make mc_update_config
 
 #############################################################
 
 build: mc_update_config
 	@if [[ "$(CONFIG_BENCHFFT_PRECISION_SINGLE)" == "y" || "$(CONFIG_BENCHFFT_PRECISION_BOTH)" == "y" ]]; then \
-		(cd $(WORKING_DIRECTORY) && mkdir -p build/ && rm -rf build/single-precision/* && \
-		mkdir -p build/single-precision && cd build/single-precision && ./../../configure --enable-single && make -k fftinfo) ;\
+		($(CD) $(WORKING_DIRECTORY) && $(MKDIR) build/ && $(RM) build/single-precision/* && \
+		$(MKDIR) build/single-precision && $(CD) build/single-precision && ./../../configure --enable-single && $(MAKE) -k fftinfo) ;\
 	fi
 	@if [[ "$(CONFIG_BENCHFFT_PRECISION_DOUBLE)" == "y" || "$(CONFIG_BENCHFFT_PRECISION_BOTH)" == "y" ]]; then \
-		(cd $(WORKING_DIRECTORY) && mkdir -p build/ && rm -rf build/double-precision/* && \
-		mkdir -p build/double-precision && cd build/double-precision && ./../../configure && make -k fftinfo) ;\
+		($(CD) $(WORKING_DIRECTORY) && $(MKDIR) build/ && $(RM) build/double-precision/* && \
+		$(MKDIR) build/double-precision && $(CD) build/double-precision && ./../../configure && $(MAKE) -k fftinfo) ;\
 	fi
 
 run: mc_update_config
+	$(RM) $(WORKING_DIRECTORY)/exceptions.txt
 	@if [[ "$(CONFIG_BENCHFFT_PRECISION_SINGLE)" == "y" || "$(CONFIG_BENCHFFT_PRECISION_BOTH)" == "y" ]]; then \
 		if [[ "$(CONFIG_BENCHFFT_ACCURACY)" == "y" ]]; then \
 			find $(WORKING_DIRECTORY)/benchees -name accuracy -delete ;\
-			(cd $(WORKING_DIRECTORY)/build/single-precision && make -k accuracy) ;\
+			($(CD) $(WORKING_DIRECTORY)/build/single-precision && $(MAKE) -k accuracy) ;\
 		fi ;\
 		if [[ "$(CONFIG_BENCHFFT_SPEED)" == "y" ]]; then \
 			find $(WORKING_DIRECTORY)/benchees -name benchmark -delete ;\
-			(cd $(WORKING_DIRECTORY)/build/single-precision && make -k benchmark) ;\
+			($(CD) $(WORKING_DIRECTORY)/build/single-precision && $(MAKE) -k benchmark) ;\
 		fi \
 	fi;\
     if [[ "$(CONFIG_BENCHFFT_PRECISION_DOUBLE)" == "y" || "$(CONFIG_BENCHFFT_PRECISION_BOTH)" == "y" ]]; then \
 		if [[ "$(CONFIG_BENCHFFT_ACCURACY)" == "y" ]]; then \
 			find $(WORKING_DIRECTORY)/benchees -name accuracy -delete ;\
-			(cd $(WORKING_DIRECTORY)/build/double-precision && make -k accuracy) ;\
+			($(CD) $(WORKING_DIRECTORY)/build/double-precision && $(MAKE) -k accuracy) ;\
 		fi ;\
 		if [[ "$(CONFIG_BENCHFFT_SPEED)" == "y" ]]; then \
 			find $(WORKING_DIRECTORY)/benchees -name benchmark -delete ;\
-			(cd $(WORKING_DIRECTORY)/build/double-precision && make -k benchmark) ;\
+			($(CD) $(WORKING_DIRECTORY)/build/double-precision && $(MAKE) -k benchmark) ;\
 		fi \
 	fi
 
@@ -79,25 +85,25 @@ collect:
 
 plot: collect
 	(cd $(WORKING_DIRECTORY) && \
-	rm -rf plots/ && \
-	scripts/standard-plots.sh tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).speed && \
-	scripts/standard-plots.sh tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).accuracy && \
-	mkdir -p plots/ && \
-	mv *.ps plots/)
+	$(MKDIR) plots/ && \
+	$(RM) plots/* && \
+        cd plots/ && \
+	../scripts/standard-plots.sh ../tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).speed && \
+	../scripts/standard-plots.sh ../tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).accuracy)
 
-report:
-	sh $(WORKING_DIRECTORY)/ps_to_png.sh
+report: plot
+	$(SHELL) $(WORKING_DIRECTORY)/ps_to_png.sh
 	$(info Converting .ps files to .png...)
-	rm $(WORKING_DIRECTORY)/plots/*.ps 
+	$(RM) $(WORKING_DIRECTORY)/plots/*.ps 
 
 mrproper:
-	make distclean
-	rm -rf $(WORKING_DIRECTORY)/build/*
-	rm config.status 
-	rm -rf plots/
-	rm *.speed
-	rm *.accuracy
-	find . -name *.single.accuracy -delete
-	find . -name *.single.info -delete
+	$(RM) $(WORKING_DIRECTORY)/build/*
+	$(RM) config.status 
+	$(RM) plots/
+	$(FIND) -name speed -delete
+	$(FIND) -name *.speed -delete
+	$(FIND) -name accuracy -delete
+	$(FIND) -name *.accuracy -delete
+	$(FIND) -name *.info -delete
 
 #############################################################
