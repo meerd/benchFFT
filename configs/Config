@@ -5,8 +5,30 @@ config CONFIG_CONFIGURED
     bool
     default y
 
+choice
+    prompt "Host Platform"
+    default BENCHFFT_PLATFORM_X86
+    help
+        x86:
+        ARM:
+        MIPS:
+
+config BENCHFFT_PLATFORM_X86
+    bool "x86"
+
+config BENCHFFT_PLATFORM_ARM
+    bool "ARM"
+
+config BENCHFFT_PLATFORM_MIPS
+    bool "MIPS"
+
+endchoice
+
 config CROSS_PREFIX
     string "Cross compile prefix"
+	depends on !BENCHFFT_PLATFORM_X86
+	default "arm-linux-gnueabi-" if BENCHFFT_PLATFORM_ARM
+	default "mips-linux-gnu-" if BENCHFFT_PLATFORM_MIPS
 
 config BENCHFFT_TEST_PROFILE_NAME
     string "Test Profile Name"
