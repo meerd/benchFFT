@@ -206,9 +206,15 @@ static double acmp(bench_complex *A, bench_complex *B, unsigned int n,
 
 static void do_fft(struct problem *p, bench_complex *in, bench_complex *out)
 {
-     problem_ccopy_from(p, in);
-     doit(1, p);
-     problem_ccopy_to(p, out);
+    problem_ccopy_from(p, in);
+#if (FP_EXCEPTIONS + 0) != 0
+	enable_fp_exceptions();
+#endif
+    doit(1, p);
+#if (FP_EXCEPTIONS + 0) != 0
+    save_fp_exceptions();  
+#endif
+    problem_ccopy_to(p, out);
 }
 
 /*

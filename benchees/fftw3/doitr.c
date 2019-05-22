@@ -82,7 +82,6 @@ void copy_c2h(struct problem *p, bench_complex *in)
 
 void setup(struct problem *p)
 {
-     unsigned flags = the_flags;  
      BENCH_ASSERT(can_do(p));
  
      if (p->sign == 1)

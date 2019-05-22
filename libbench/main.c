@@ -22,12 +22,6 @@
 
 #include "bench.h"
 
-#ifdef CATCH_FP_EXCEPTIONS
-	extern void enable_fp_exceptions(void);
-	extern void save_fp_exceptions(void);
-	extern void test_fp_exceptions(void);
-#endif
-
 /* On some systems, we are required to define a dummy main-like
    routine (called "MAIN__" or something similar in order to link a C
    main() with the Fortran libraries).  This is detected by autoconf;
@@ -42,15 +36,5 @@
 /* in a separate file so that the user can override it */
 int main(int argc, char *argv[])
 {
-     int retval;
-#ifdef CATCH_FP_EXCEPTIONS
-	enable_fp_exceptions();
-#endif
-
-     retval = bench_main(argc, argv);
-
-#ifdef CATCH_FP_EXCEPTIONS
-	save_fp_exceptions();
-#endif    
-     return retval;
+     return bench_main(argc, argv);
 }

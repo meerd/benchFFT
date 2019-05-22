@@ -63,3 +63,7 @@ extern struct problem *problem_parse(const char *desc);
 extern void problem_destroy(struct problem *p);
 
 extern void ovtpvt(const char *format, ...);
+
+extern void enable_fp_exceptions(void);
+extern void save_fp_exceptions(void);
+extern void test_fp_exceptions(int excp_index);

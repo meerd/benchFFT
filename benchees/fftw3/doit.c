@@ -104,18 +104,18 @@ void setup(struct problem *p)
  
      if (p->kind == PROBLEM_COMPLEX) {
 	  the_plan = FFTW(plan_dft)(
-	       p->rank, p->n,
+	       p->rank, (const int *) p->n,
 	       p->in, p->out,
 	       p->sign, the_flags);
      } else {
 	  if (p->sign == -1) {
 	       the_plan = FFTW(plan_dft_r2c)(
-		    p->rank, p->n,
+		    p->rank, (const int *) p->n,
 		    p->in, p->out,
 		    the_flags);
 	  } else {
 	       the_plan = FFTW(plan_dft_c2r)(
-		    p->rank, p->n,
+		    p->rank, (const int *) p->n,
 		    p->in, p->out,
 		    the_flags);
 	  }

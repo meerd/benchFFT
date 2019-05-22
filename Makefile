@@ -57,25 +57,23 @@ build: mc_update_config
 
 run: mc_update_config
 	$(RM) $(WORKING_DIRECTORY)/exceptions.txt
+	find $(WORKING_DIRECTORY)/build/ -name accuracy -delete
+	find $(WORKING_DIRECTORY)/build/ -name benchmark -delete
 	@if [[ "$(CONFIG_BENCHFFT_PRECISION_SINGLE)" == "y" || "$(CONFIG_BENCHFFT_PRECISION_BOTH)" == "y" ]]; then \
 		if [[ "$(CONFIG_BENCHFFT_ACCURACY)" == "y" ]]; then \
-			find $(WORKING_DIRECTORY)/benchees -name accuracy -delete ;\
 			($(CD) $(WORKING_DIRECTORY)/build/single-precision && $(MAKE) -k accuracy) ;\
 		fi ;\
 		if [[ "$(CONFIG_BENCHFFT_SPEED)" == "y" ]]; then \
-			find $(WORKING_DIRECTORY)/benchees -name benchmark -delete ;\
 			($(CD) $(WORKING_DIRECTORY)/build/single-precision && $(MAKE) -k benchmark) ;\
-		fi \
+		fi ;\
 	fi;\
-    if [[ "$(CONFIG_BENCHFFT_PRECISION_DOUBLE)" == "y" || "$(CONFIG_BENCHFFT_PRECISION_BOTH)" == "y" ]]; then \
+    	if [[ "$(CONFIG_BENCHFFT_PRECISION_DOUBLE)" == "y" || "$(CONFIG_BENCHFFT_PRECISION_BOTH)" == "y" ]]; then \
 		if [[ "$(CONFIG_BENCHFFT_ACCURACY)" == "y" ]]; then \
-			find $(WORKING_DIRECTORY)/benchees -name accuracy -delete ;\
 			($(CD) $(WORKING_DIRECTORY)/build/double-precision && $(MAKE) -k accuracy) ;\
 		fi ;\
 		if [[ "$(CONFIG_BENCHFFT_SPEED)" == "y" ]]; then \
-			find $(WORKING_DIRECTORY)/benchees -name benchmark -delete ;\
 			($(CD) $(WORKING_DIRECTORY)/build/double-precision && $(MAKE) -k benchmark) ;\
-		fi \
+		fi ; \
 	fi
 
 collect:

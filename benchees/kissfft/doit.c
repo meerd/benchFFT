@@ -70,13 +70,13 @@ void setup(struct problem *p)
 		if (p->rank == 1) { 
 			WORK = kiss_fft_alloc(p->n[0], (p->sign == 1), 0, 0);
 		} else {
-			WORK = kiss_fftnd_alloc(p->n, p->rank, (p->sign == 1), 0, 0);
+			WORK = kiss_fftnd_alloc((const int *) p->n, p->rank, (p->sign == 1), 0, 0);
 		}
 	} else {
 		if (p->rank == 1) { 
 			WORK = kiss_fftr_alloc(p->n[0], (p->sign == 1), 0, 0);
 		} else {
-			WORK = kiss_fftndr_alloc(p->n, p->rank, (p->sign == 1), 0, 0);
+			WORK = kiss_fftndr_alloc((const int *) p->n, p->rank, (p->sign == 1), 0, 0);
 		}
 	}
 }

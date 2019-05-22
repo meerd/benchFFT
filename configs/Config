@@ -45,7 +45,7 @@ config BENCHFFT_CATCH_FP_EXCEPTIONS
     bool "Catch Floating Point Exceptions"
     default n
 
-config CONFIG_BENCHFFT_USE_GNU_EXCEPTIONS
+config BENCHFFT_USE_GNU_EXCEPTIONS
     bool "Force using GNU exceptions."
     depends on BENCHFFT_CATCH_FP_EXCEPTIONS    
 
