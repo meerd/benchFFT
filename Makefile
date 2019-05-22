@@ -38,6 +38,13 @@ mc_build:
 mc_update_config: mc_prepare
 $(eval include .config)
 $(foreach v, $(filter CONFIG_BENCHFFT_%,$(.VARIABLES)), $(sh export $(v)=$($(v))))
+export CC=$(subst $\",,$(CONFIG_CROSS_PREFIX))gcc
+
+ifeq ($(CONFIG_BENCHFFT_PLATFORM_ARM),y)
+HOST_CONFIG:="--host=arm"
+else ifeq($(CONFIG_BENCHFFT_PLATFORM_MIPS),y)
+HOST_CONFIG:="--host=mips"
+endif
 
 menuconfig: mc_prepare mc_build
 	($(CD) $(WORKING_DIRECTORY) && ./tools/menuconfig/build/mconf configs/Config)
@@ -48,11 +55,11 @@ menuconfig: mc_prepare mc_build
 build: mc_update_config
 	@if [[ "$(CONFIG_BENCHFFT_PRECISION_SINGLE)" == "y" || "$(CONFIG_BENCHFFT_PRECISION_BOTH)" == "y" ]]; then \
 		($(CD) $(WORKING_DIRECTORY) && $(MKDIR) build/ && $(RM) build/single-precision/* && \
-		$(MKDIR) build/single-precision && $(CD) build/single-precision && ./../../configure --enable-single && $(MAKE) -k fftinfo) ;\
+		$(MKDIR) build/single-precision && $(CD) build/single-precision && ./../../configure $(HOST_CONFIG) --enable-single && $(MAKE) -k fftinfo) ;\
 	fi
 	@if [[ "$(CONFIG_BENCHFFT_PRECISION_DOUBLE)" == "y" || "$(CONFIG_BENCHFFT_PRECISION_BOTH)" == "y" ]]; then \
 		($(CD) $(WORKING_DIRECTORY) && $(MKDIR) build/ && $(RM) build/double-precision/* && \
-		$(MKDIR) build/double-precision && $(CD) build/double-precision && ./../../configure && $(MAKE) -k fftinfo) ;\
+		$(MKDIR) build/double-precision && $(CD) build/double-precision && ./../../configure $(HOST_CONFIG) && $(MAKE) -k fftinfo) ;\
 	fi
 
 run: mc_update_config
