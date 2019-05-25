@@ -14,6 +14,14 @@ CD    := cd
 CP    := cp -f
 MAKE  := make
 
+SLNT       = 2>/dev/null
+ACLOCAL    = aclocal $(SLNT)
+AUTOCONF   = autoconf $(SLNT)
+AUTOHEADER = autoheader $(SLNT)
+AUTOMAKE   = automake $(SLNT)
+
+AUTOCALLS  = ($(ACLOCAL) && $(AUTOCONF) && $(AUTOHEADER) && $(AUTOMAKE))
+
 .PHONY: env init
 
 env:
@@ -21,10 +29,10 @@ env:
 	$(PKG_MANAGER) install libmotif-dev grace libgd2-xpm-dev
 
 init:
-	$(RM) config.status 
-	$(RM) config.cache
-
-	(aclocal && autoconf && autoheader && automake --add-missing)
+	@(cd $(WORKING_DIRECTORY) && $(RM) config.status && $(RM) config.cache && $(CP) configs/defconfig .config)
+	@echo "Initialazing build system..."
+	@$(AUTOCALLS) 
+	@echo "Initialization completed."
 
 ## Menu Config ###############################################
 
@@ -42,8 +50,10 @@ export CC=$(subst $\",,$(CONFIG_CROSS_PREFIX))gcc
 
 ifeq ($(CONFIG_BENCHFFT_PLATFORM_ARM),y)
 HOST_CONFIG:="--host=arm"
-else ifeq($(CONFIG_BENCHFFT_PLATFORM_MIPS),y)
+else
+ifeq ($(CONFIG_BENCHFFT_PLATFORM_MIPS),y)
 HOST_CONFIG:="--host=mips"
+endif
 endif
 
 menuconfig: mc_prepare mc_build
