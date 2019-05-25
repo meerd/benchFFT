@@ -99,17 +99,19 @@ collect:
 	@$(SHELL) $(WORKING_DIRECTORY)/scripts/collect $(WORKING_DIRECTORY)/build/double-precision/benchees tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME) 2>/dev/null; true
 
 plot: collect
-	(cd $(WORKING_DIRECTORY) && \
+	@($(CD) $(WORKING_DIRECTORY) && \
 	$(MKDIR) plots/ && \
 	$(RM) plots/* && \
-        cd plots/ && \
+    $(CD) plots/ && \
 	../scripts/standard-plots.sh ../tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).speed && \
 	../scripts/standard-plots.sh ../tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).accuracy)
 
 report: plot
-	$(SHELL) $(WORKING_DIRECTORY)/ps_to_png.sh
-	$(info Converting .ps files to .png...)
-	$(RM) $(WORKING_DIRECTORY)/plots/*.ps 
+	@(cd $(WORKING_DIRECTORY) && \
+	 $(MKDIR) report && \
+	 $(RM) report/* && \
+     $(CD) report && \
+	 $(SHELL) ../ps_to_png.sh)
 
 mrproper:
 	$(RM) $(WORKING_DIRECTORY)/build/*

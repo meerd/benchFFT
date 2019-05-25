@@ -4,6 +4,7 @@ autom4te.cache/
 plots/
 build/
 */build/
+report/
 
 # Automake ###################
 aclocal.m4
