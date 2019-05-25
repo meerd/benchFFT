@@ -447,6 +447,12 @@ print "@ xaxis ticklabel angle 270\n";
 print "@ xaxis ticklabel type spec\n";
 print "@ xaxis tick type spec\n";
 print "@ xaxis tick spec ", 1 + $#sizes, "\n";
+
+# Avoid division by zero.
+if (0 == (1 + $#sizes) || (0 == $maxlen_siz)) {
+	exit;
+}
+
 $labelsize = 30.0 / (1 + $#sizes);
 $lsz = 10.0 / $maxlen_siz;
 $labelsize = $lsz if ($lsz < $labelsize);
