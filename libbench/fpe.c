@@ -23,9 +23,7 @@
 #include <float.h>
 #include <limits.h>
 
-#define UNUSED(a) (void) (a)
-#define STRINGIZE(x) #x
-#define SVAL(x) STRINGIZE(x)
+#include "bench.h"
 
 static FILE *dump = NULL;
 

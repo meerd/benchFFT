@@ -5,6 +5,7 @@ plots/
 build/
 */build/
 report/
+artifacts/
 
 # Automake ###################
 aclocal.m4

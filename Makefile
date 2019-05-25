@@ -12,6 +12,7 @@ MKDIR := mkdir -p
 FIND  := find $(WORKING_DIRECTORY)/
 CD    := cd
 CP    := cp -f
+ECHO  := echo
 MAKE  := make
 
 SLNT       = 2>/dev/null
@@ -22,7 +23,7 @@ AUTOMAKE   = automake $(SLNT)
 
 AUTOCALLS  = ($(ACLOCAL) && $(AUTOCONF) && $(AUTOHEADER) && $(AUTOMAKE))
 
-.PHONY: env init
+.PHONY: env artifacts init
 
 env:
 	$(PKG_MANAGER) update	
@@ -102,7 +103,7 @@ plot: collect
 	@($(CD) $(WORKING_DIRECTORY) && \
 	$(MKDIR) plots/ && \
 	$(RM) plots/* && \
-    $(CD) plots/ && \
+	$(CD) plots/ && \
 	../scripts/standard-plots.sh ../tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).speed && \
 	../scripts/standard-plots.sh ../tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).accuracy)
 
@@ -110,8 +111,25 @@ report: plot
 	@(cd $(WORKING_DIRECTORY) && \
 	 $(MKDIR) report && \
 	 $(RM) report/* && \
-     $(CD) report && \
+	 $(CD) report && \
 	 $(SHELL) ../ps_to_png.sh)
+
+CONFIG_BENCHFFT_MAX_PROBLEM_SIZE=4
+CONFIG_BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE=1024
+
+
+artifacts:
+	@($(CD) $(WORKING_DIRECTORY) && \
+	  $(RM) artifacts && \
+	  $(MKDIR) artifacts && \
+	  $(CD) build/ && \
+	  find . -name 'doit' -exec cp --parents \{\} ../artifacts/ \; && \
+	  $(CP) ../scripts/run.sh ../artifacts/ && \
+	  $(ECHO) "#!/bin/bash sh ./run.sh tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME) $(CONFIG_BENCHFFT_MAX_PROBLEM_SIZE) $(CONFIG_BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE) /tmp" > ../artifacts/start.sh && \
+	  $(CP) ../scripts/collect ../artifacts/ && \
+	  $(CP) ../scripts/benchmark ../artifacts/ && \
+	  $(CP) ../scripts/writeinfo ../artifacts/ \
+	)
 
 mrproper:
 	$(RM) $(WORKING_DIRECTORY)/build/*

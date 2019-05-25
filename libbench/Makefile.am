@@ -3,6 +3,7 @@ noinst_LIBRARIES=libbench.a
 libbench_a_CFLAGS = $(AM_CFLAGS) @ALTIVEC_ABIFLAGS@ \
 			-DFP_EXCEPTIONS=$(CATCH_FP_EXCEPTIONS:y=1) \
 			-DUSE_GNU_FP_EXCEPTIONS=$(FORCE_GNU_EXCEPTIONS:y=1) \
+			-DREPORT_PREFIX=$(REPORT_PREFIX) \
 			-DROOT_DIR=$(ROOT_DIR)
 
 libbench_a_SOURCES=accopy-from.c accopy-to.c acopy.c allocate.c		\

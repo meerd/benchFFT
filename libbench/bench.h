@@ -24,6 +24,9 @@
 #include "config.h"
 #include "bench-user.h"
 
+#define STRINGIZE(x)  #x
+#define SVAL(x)       STRINGIZE(x)
+
 extern double time_min;
 extern int time_repeat;
 extern int verbose;

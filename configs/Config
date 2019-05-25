@@ -63,8 +63,8 @@ config BENCHFFT_PRECISION_BOTH
 
 endchoice
 
-config BENCHFFT_TEST_PREFIX
-   string "Test Prefix (Max 5 Characters)"
+config BENCHFFT_REPORT_PREFIX
+   string "Report Prefix (Max 5 Characters)"
    default ""
 
 config BENCHFFT_CATCH_FP_EXCEPTIONS

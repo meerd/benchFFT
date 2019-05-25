@@ -18,24 +18,34 @@
  *
  */
 
-/* $Id: info.c,v 1.9 2003/05/10 02:07:17 stevenj Exp $ */
+#include <stdio.h>
+#include <string.h>
 
 #include "config.h"
 #include "bench.h"
-#include <stdio.h>
-#include <string.h>
+
+#define REPORT_PREFIX_MAX	5
+
+static char report_prefix[REPORT_PREFIX_MAX + 1 + 1] = { 0 }; /* prefix + underscore + null */
+static int report_prefix_len = -1;
 
 void report_info(const char *param)
 {
      struct bench_doc *p;
+	 
+     if (-1 == report_prefix_len) {
+          strncpy(report_prefix, SVAL(REPORT_PREFIX), REPORT_PREFIX_MAX);
+          report_prefix_len = strlen(report_prefix);
+	      if (0 != report_prefix_len)
+               strcat(report_prefix, "_");
+     }
 
      for (p = bench_doc; p->key; ++p) {
-	  if (!strcmp(param, p->key)) {
-	       if (!p->val)
-		    p->val = p->f();
-
-	       ovtpvt("%s\n", p->val);
-	  }
+	      if (!strcmp(param, p->key)) {
+	           if (!p->val)
+		            p->val = p->f();
+	           ovtpvt("%s%s\n", report_prefix, p->val);
+          }
      }
 }
 
