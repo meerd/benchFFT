@@ -7,6 +7,11 @@ MAXN=$2
 MAXND=$3
 OUTPUT_DIRECTORY=$4
 
+echo "Profile Name: ${TEST_PROFILE_NAME}"
+echo "Max Problem Size: ${MAXN}"
+echo "Max Multi-dimensional Problem Size: ${MAXND}"
+echo "Output Directory: ${OUTPUT_DIRECTORY}"
+
 PROGS=$(find . -name 'doit')
 
 for prog in ${PROGS}; do

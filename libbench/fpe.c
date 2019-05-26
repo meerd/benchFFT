@@ -156,7 +156,7 @@ static void sigfpe_handler(int sig, siginfo_t *info, void *context)
 
 void enable_fp_exceptions(void)
 {
-    const char *out = SVAL(ROOT_DIR) "/exceptions.txt";
+    const char *out = SVAL(OUTPUT_FOLDER) "/" SVAL(TEST_PROFILE_NAME) ".exceptions";
     dump = fopen(out, "a+");
 
 	/* srand(time(0)); */

@@ -30,7 +30,7 @@ env:
 	$(PKG_MANAGER) install libmotif-dev grace libgd2-xpm-dev
 
 init:
-	@(cd $(WORKING_DIRECTORY) && $(RM) config.status && $(RM) config.cache && $(CP) configs/defconfig .config)
+	@(cd $(WORKING_DIRECTORY) && $(RM) config.status && $(RM) config.cache)
 	@echo "Initialazing build system..."
 	@$(AUTOCALLS) 
 	@echo "Initialization completed."
@@ -74,7 +74,9 @@ build: mc_update_config
 	fi
 
 run: mc_update_config
-	$(RM) $(WORKING_DIRECTORY)/exceptions.txt
+	$(RM) $(if $(CONFIG_BENCHFFT_USE_OUTPUT_FOLDER),$(CONFIG_BENCHFFT_OUTPUT_FOLDER),$(ROOT_DIR))/tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).exceptions
+	$(RM) $(if $(CONFIG_BENCHFFT_USE_OUTPUT_FOLDER),$(CONFIG_BENCHFFT_OUTPUT_FOLDER),$(ROOT_DIR))/tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).accuracy
+	$(RM) $(if $(CONFIG_BENCHFFT_USE_OUTPUT_FOLDER),$(CONFIG_BENCHFFT_OUTPUT_FOLDER),$(ROOT_DIR))/tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).speed
 	find $(WORKING_DIRECTORY)/build/ -name accuracy -delete
 	find $(WORKING_DIRECTORY)/build/ -name benchmark -delete
 	@if [[ "$(CONFIG_BENCHFFT_PRECISION_SINGLE)" == "y" || "$(CONFIG_BENCHFFT_PRECISION_BOTH)" == "y" ]]; then \
@@ -94,18 +96,13 @@ run: mc_update_config
 		fi ; \
 	fi
 
-collect:
-	@$(RM) tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME)*
-	@$(SHELL) $(WORKING_DIRECTORY)/scripts/collect $(WORKING_DIRECTORY)/build/single-precision/benchees tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME) 2>/dev/null; true
-	@$(SHELL) $(WORKING_DIRECTORY)/scripts/collect $(WORKING_DIRECTORY)/build/double-precision/benchees tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME) 2>/dev/null; true
-
-plot: collect
+plot:
 	@($(CD) $(WORKING_DIRECTORY) && \
 	$(MKDIR) plots/ && \
 	$(RM) plots/* && \
 	$(CD) plots/ && \
-	../scripts/standard-plots.sh ../tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).speed && \
-	../scripts/standard-plots.sh ../tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).accuracy)
+	../scripts/standard-plots.sh $(if $(CONFIG_BENCHFFT_USE_OUTPUT_FOLDER),$(CONFIG_BENCHFFT_OUTPUT_FOLDER),$(ROOT_DIR))/tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).speed && \
+	../scripts/standard-plots.sh $(if $(CONFIG_BENCHFFT_USE_OUTPUT_FOLDER),$(CONFIG_BENCHFFT_OUTPUT_FOLDER),$(ROOT_DIR))/tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME).accuracy)
 
 report: plot
 	@(cd $(WORKING_DIRECTORY) && \
@@ -114,10 +111,6 @@ report: plot
 	 $(CD) report && \
 	 $(SHELL) ../ps_to_png.sh)
 
-CONFIG_BENCHFFT_MAX_PROBLEM_SIZE=4
-CONFIG_BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE=1024
-
-
 artifacts:
 	@($(CD) $(WORKING_DIRECTORY) && \
 	  $(RM) artifacts && \
@@ -125,16 +118,19 @@ artifacts:
 	  $(CD) build/ && \
 	  find . -name 'doit' -exec cp --parents \{\} ../artifacts/ \; && \
 	  $(CP) ../scripts/run.sh ../artifacts/ && \
-	  $(ECHO) "#!/bin/bash sh ./run.sh tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME) $(CONFIG_BENCHFFT_MAX_PROBLEM_SIZE) $(CONFIG_BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE) /tmp" > ../artifacts/start.sh && \
+	  $(ECHO) -e "#!/bin/bash\nsh ./run.sh tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME) $(CONFIG_BENCHFFT_MAX_PROBLEM_SIZE) $(CONFIG_BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE) /tmp" > ../artifacts/start.sh && \
 	  $(CP) ../scripts/collect ../artifacts/ && \
 	  $(CP) ../scripts/benchmark ../artifacts/ && \
 	  $(CP) ../scripts/writeinfo ../artifacts/ \
 	)
+	@echo "Artifacts created successfully."
 
 mrproper:
 	$(RM) $(WORKING_DIRECTORY)/build/*
 	$(RM) config.status 
 	$(RM) plots/
+	$(RM) report/
+	$(RM) artifacts/
 	$(FIND) -name speed -delete
 	$(FIND) -name *.speed -delete
 	$(FIND) -name accuracy -delete

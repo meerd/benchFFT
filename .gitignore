@@ -79,3 +79,4 @@ Makefile.in
 *.ps
 *~
 *.log
+*.exceptions

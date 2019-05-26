@@ -4,7 +4,9 @@ libbench_a_CFLAGS = $(AM_CFLAGS) @ALTIVEC_ABIFLAGS@ \
 			-DFP_EXCEPTIONS=$(CATCH_FP_EXCEPTIONS:y=1) \
 			-DUSE_GNU_FP_EXCEPTIONS=$(FORCE_GNU_EXCEPTIONS:y=1) \
 			-DREPORT_PREFIX=$(REPORT_PREFIX) \
-			-DROOT_DIR=$(ROOT_DIR)
+			-DROOT_DIR=$(ROOT_DIR) \
+			-DOUTPUT_FOLDER=$(OUTPUT_FOLDER) \
+			-DTEST_PROFILE_NAME=$(TEST_PROFILE_NAME)
 
 libbench_a_SOURCES=accopy-from.c accopy-to.c acopy.c allocate.c		\
 ascale.c aset.c bench-main.c caadd.c cacopy.c can-do.c cascale.c	\

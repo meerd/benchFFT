@@ -83,6 +83,15 @@ config BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE
     int "Maximum Multi-Dimensional Problem Size"
     default 65536
 
+config BENCHFFT_USE_OUTPUT_FOLDER
+    bool "Use Output Folder for the Results"
+    default n
+
+config BENCHFFT_OUTPUT_FOLDER
+    string "Output Folder"
+    depends on BENCHFFT_USE_OUTPUT_FOLDER
+    default "/tmp"
+
 endmenu
 
 
