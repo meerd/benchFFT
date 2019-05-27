@@ -14,6 +14,7 @@ CD    := cd
 CP    := cp -f
 ECHO  := echo
 MAKE  := make
+TARGZ := tar -zcvf 
 
 SLNT       = 2>/dev/null
 ACLOCAL    = aclocal $(SLNT)
@@ -108,8 +109,7 @@ report: plot
 	@(cd $(WORKING_DIRECTORY) && \
 	 $(MKDIR) report && \
 	 $(RM) report/* && \
-	 $(CD) report && \
-	 $(SHELL) ../ps_to_png.sh)
+	 $(SHELL) ./scripts/gen_html_rep.sh)
 
 artifacts:
 	@($(CD) $(WORKING_DIRECTORY) && \
@@ -118,11 +118,14 @@ artifacts:
 	  $(CD) build/ && \
 	  find . -name 'doit' -exec cp --parents \{\} ../artifacts/ \; && \
 	  $(CP) ../scripts/run.sh ../artifacts/ && \
-	  $(ECHO) -e "#!/bin/bash\nsh ./run.sh tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME) $(CONFIG_BENCHFFT_MAX_PROBLEM_SIZE) $(CONFIG_BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE) /tmp" > ../artifacts/start.sh && \
-	  $(CP) ../scripts/collect ../artifacts/ && \
+	  $(ECHO) -e "#!/bin/bash\nsh ./run.sh tp_$(CONFIG_BENCHFFT_TEST_PROFILE_NAME) $(CONFIG_BENCHFFT_MAX_PROBLEM_SIZE) \
+	  $(CONFIG_BENCHFFT_MAX_MULTI_DIMENSIONAL_PROBLEM_SIZE) $(if $(CONFIG_BENCHFFT_USE_OUTPUT_FOLDER),$(CONFIG_BENCHFFT_OUTPUT_FOLDER),$(ROOT_DIR)) \
+	  $(if $(CONFIG_BENCHFFT_ACCURACY),1,0) \
+	  $(if $(CONFIG_BENCHFFT_SPEED),1,0)" > ../artifacts/start.sh && \
 	  $(CP) ../scripts/benchmark ../artifacts/ && \
 	  $(CP) ../scripts/writeinfo ../artifacts/ \
 	)
+	@($(CD) $(WORKING_DIRECTORY)/artifacts && $(TARGZ) ../artifacts.tar.gz .)
 	@echo "Artifacts created successfully."
 
 mrproper:
